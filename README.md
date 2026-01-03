@@ -1,5 +1,3 @@
----
-
 # 🌐 Working with APIs — Flask Web App 
 ### Quotes • Weather • Accounts • Leaflet Map • Docker Deploy
 
