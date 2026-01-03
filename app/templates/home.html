@@ -1,0 +1,45 @@
+<!-- home.html -->
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mb-4">Добро пожаловать!</h1>
+
+<p class="text-center text-muted mb-5">
+    Выберите один из разделов ниже, чтобы продолжить.
+</p>
+
+<div class="row text-center">
+
+    <!-- Погода -->
+<div class="col-md-6 mb-4">
+    <div class="card hoverable shadow-sm p-4 h-100 d-flex flex-column">
+        <h3 class="mb-3">Погода</h3>
+        <p class="text-muted">Узнайте погоду в любом городе мира.</p>
+
+        <div class="mt-auto">
+            <a href="{{ url_for('weather') }}" class="btn btn-primary btn-lg">
+                Перейти
+            </a>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Цитаты -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm p-4 h-100 d-flex flex-column">
+            <h3 class="mb-3">Случайная цитата</h3>
+            <p class="text-muted">Получите вдохновляющую цитату одним нажатием.</p>
+
+            <div class="mt-auto">
+                <a href="{{ url_for('quotes') }}" class="btn btn-primary btn-lg">
+                    Перейти
+            </a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+<!-- quotes_history.html -->
+{% extends "base.html" %}
+{% block title %}История цитат{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">История цитат</h2>
+
+<div id="historyContainer" class="row g-4"></div>
+
+<div class="text-center mt-4">
+    <button id="clearHistory" class="btn btn-danger">Очистить историю</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("historyContainer");
+    const history = JSON.parse(localStorage.getItem("quoteHistory") || "[]");
+
+    if (history.length === 0) {
+        container.innerHTML = "<p class='text-center text-muted'>История пуста</p>";
+        return;
+    }
+
+    history.reverse().forEach(item => {
+        const card = document.createElement("div");
+        card.className = "col-md-6";
+
+        card.innerHTML = `
+            <div class="card shadow p-3 h-100">
+                <blockquote class="blockquote">
+                    <p>${item.quote}</p>
+                    <footer class="blockquote-footer">${item.author}</footer>
+                </blockquote>
+                <p class="text-muted">${item.quoteRu}</p>
+                <small class="text-muted">${new Date(item.date).toLocaleString()}</small>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+
+    document.getElementById("clearHistory").addEventListener("click", () => {
+        localStorage.removeItem("quoteHistory");
+        location.reload();
+    });
+});
+</script>
+{% endblock %}

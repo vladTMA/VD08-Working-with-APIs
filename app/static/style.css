@@ -1,0 +1,164 @@
+/* style.css */
+/* ================================
+   ГЛОБАЛЬНЫЕ ЭФФЕКТЫ
+================================ */
+
+/* Плавное появление всей страницы */
+body {
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+/* ================================
+   СНЕЖИНКИ — РЕАЛИСТИЧНЫЕ
+================================ */
+
+.snowflake {
+    position: fixed;
+    top: -10px;
+    z-index: 9999;
+    pointer-events: none;
+    user-select: none;
+
+    /* Индивидуальные параметры будут задаваться JS */
+    animation-name: fall, swaySpin, fadeout;
+    animation-timing-function: linear, ease-in-out, linear;
+    animation-iteration-count: 1, infinite, 1;
+}
+
+.snowflake span {
+    display: inline-block;
+}
+
+/* Падение вниз */
+@keyframes fall {
+    to { top: 100vh; }
+}
+
+/* Покачивание влево-вправо */
+@keyframes swaySpin {
+    0%   { transform: translateX(0) rotate(0deg); }
+    25%  { transform: translateX(15px) rotate(90deg); }
+    50%  { transform: translateX(-15px) rotate(180deg); }
+    75%  { transform: translateX(10px) rotate(270deg); }
+    100% { transform: translateX(0) rotate(360deg); }
+}
+
+
+/* Лёгкое вращение снежинок */
+@keyframes spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fade-in {
+  animation: fadeInUp 1s ease-in-out both;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Постепенное исчезновение */
+@keyframes fadeout {
+    to { opacity: 0; }
+}
+
+
+/* ================================
+   КАРТОЧКИ
+================================ */
+
+/* Базовые карточки Bootstrap */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Эффект наведения только для карточек с классом hoverable */
+.card.hoverable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Эффект увеличения картинки */
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.card.hoverable:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+
+/* ================================
+   ФУТЕР — ЭФФЕКТЫ НАВЕДЕНИЯ
+================================ */
+
+footer a {
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+footer a:hover {
+    color: #0d6efd !important;
+    text-shadow: 0 0 5px rgba(13, 110, 253, 0.7);
+}
+
+
+/* ================================
+   ЦВЕТОВАЯ ТЕМА — МЯГКИЙ СИНИЙ
+================================ */
+
+.bg-soft-blue {
+    background-color: #3b5d7a !important; /* мягкий зимний синий */
+}
+
+.bg-soft-blue-light {
+    background-color: #4f7aa1 !important; /* чуть светлее */
+}
+
+
+/* ================================
+   ОЗВУЧКА ЦИТАТ
+================================ */
+
+.quote-card {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.quote-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ================================
+   АНИМАЦИЯ ПЕРЕЛИСТЫВАНИЯ НА СТРАНИЦЕ ЦИТАТЫ
+================================ */
+.flip-card {
+    transition: transform 0.6s ease;
+    transform-style: preserve-3d;
+}
+
+.flip-card.flip {
+    transform: rotateY(180deg);
+}
+
+/* ================================
+   КАРТА — LEAFLET
+================================ */
+
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 12px;
+}
+
+

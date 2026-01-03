@@ -1,0 +1,225 @@
+<!-- weather.html -->
+{% extends "base.html" %}
+
+{% block title %}Погода{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Погода</h2>
+
+<!-- Форма ввода города -->
+<form method="POST" class="mb-4">
+    {{ form.hidden_tag() }}
+    <div class="input-group">
+        {{ form.city(class="form-control", placeholder="Введите город") }}
+        <button class="btn btn-primary">{{ form.submit.label.text }}</button>
+    </div>
+</form>
+
+<!-- Если данные получены -->
+{% if weather %}
+    {% if weather.error %}
+        <div class="alert alert-danger">{{ weather.error }}</div>
+    {% else %}
+
+    <div class="card shadow p-4">
+
+
+        <!-- Название города -->
+        <h3 class="mb-3">{{ weather.city }}</h3>
+
+        <!-- Иконка и температура -->
+        <div class="d-flex align-items-center mb-3">
+            <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@4x.png" alt="icon">
+            <div class="ms-3">
+                <h2>{{ weather.temp }}°C</h2>
+                <p class="text-muted">{{ weather.description }}</p>
+            </div>
+        </div>
+
+        <!-- Основные параметры -->
+        <ul class="list-group mb-4">
+            <li class="list-group-item">Координаты: {{ weather.lat }}, {{ weather.lon }}</li>
+            <li class="list-group-item">Минимальная температура: {{ weather.temp_min }}°C</li>
+            <li class="list-group-item">Максимальная температура: {{ weather.temp_max }}°C</li>
+            <li class="list-group-item">Ощущается как: {{ weather.feels_like }}°C</li>
+            <li class="list-group-item">Влажность: {{ weather.humidity }}%</li>
+            <li class="list-group-item">Скорость ветра: {{ weather.wind_speed }} м/с</li>
+        </ul>
+
+        <!-- Восход и закат -->
+<h4 class="mb-3">Восход и закат</h4>
+
+<div class="form-check form-switch mb-4">
+    <input class="form-check-input" type="checkbox" id="toggleTimezones" checked>
+    <label class="form-check-label" for="toggleTimezones" id="toggleLabel">
+        Показать все часовые зоны
+    </label>
+</div>
+
+<div class="row g-4">
+
+    <!-- Местное время -->
+    <div class="col-md-4" data-zone="local">
+        <div class="bg-light shadow-sm fade-in h-100 d-flex flex-column rounded p-3">
+
+            <h5 class="card-title mb-3">
+                <i class="bi bi-clock me-2 text-primary"></i>Местное время
+            </h5>
+
+            <div class="row mb-2">
+                <div class="col-auto">
+                    <img src="{{ url_for('static', filename='icons/sunrise.jfif') }}" width="24" alt="Восход">
+                </div>
+                <div class="col">
+                    Восход:<br>
+                    {{ weather.sunrise_local }}</div>
+            </div>
+
+            <div class="row mt-auto">
+                <div class="col-auto">
+                    <img src="{{ url_for('static', filename='icons/sunset.jfif') }}" width="24" alt="Закат">
+                </div>
+                <div class="col">
+                    Закат:<br>
+                    {{ weather.sunset_local }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Москва -->
+    <div class="col-md-4" data-zone="moscow">
+        <div class="bg-light shadow-sm fade-in h-100 d-flex flex-column rounded p-3">
+
+            <h5 class="card-title mb-3">
+                <i class="bi bi-clock me-2 text-primary"></i>Москва
+            </h5>
+
+            <div class="row mb-2">
+                <div class="col-auto">
+                    <img src="{{ url_for('static', filename='icons/sunrise.jfif') }}" width="24">
+                </div>
+                <div class="col">Восход: {{ weather.sunrise_moscow }}</div>
+            </div>
+
+            <div class="row mt-auto">
+                <div class="col-auto">
+                    <img src="{{ url_for('static', filename='icons/sunset.jfif') }}" width="24">
+                </div>
+                <div class="col">Закат: {{ weather.sunset_moscow }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UTC -->
+    <div class="col-md-4" data-zone="utc">
+        <div class="bg-light shadow-sm fade-in h-100 d-flex flex-column rounded p-3">
+
+            <h5 class="card-title mb-3">
+                <i class="bi bi-clock me-2 text-primary"></i>UTC
+            </h5>
+
+            <div class="row mb-2">
+                <div class="col-auto">
+                    <img src="{{ url_for('static', filename='icons/sunrise.jfif') }}" width="24">
+                </div>
+                <div class="col">Восход: {{ weather.sunrise_utc }}</div>
+            </div>
+
+            <div class="row mt-auto">
+                <div class="col-auto">
+                    <img src="{{ url_for('static', filename='icons/sunset.jfif') }}" width="24">
+                </div>
+                <div class="col">Закат: {{ weather.sunset_utc }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Продолжительность дня: ЧЧ:ММ -->
+    <div class="row g-4 mt-3">
+    <div class="col-12">
+        <div class="bg-light shadow-sm fade-in rounded p-3">
+
+            <h5 class="card-title mb-3">
+                <i class="bi bi-brightness-high me-2 text-primary"></i>
+                Продолжительность дня
+            </h5>
+
+            <p class="fs-5 mb-0">
+                {{ weather.day_length }}
+            </p>
+
+           </div>
+       </div>
+    </div>
+
+</div>
+
+
+        <!-- Карта -->
+    <div class="mt-5">
+        <h4 class="mb-3">
+            <i class="bi bi-geo-alt-fill me-2 text-primary"></i>Карта
+        </h4>
+    <div id="map" class="border rounded shadow-sm" style="height: 400px;"></div>
+   </div>
+
+   </div>
+
+    {% endif %}
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    {% if weather %}
+    var lat = "{{ weather.lat }}";
+    var lon = "{{ weather.lon }}";
+
+    lat = parseFloat(lat);
+    lon = parseFloat(lon);
+
+    console.log("Карта инициализируется", lat, lon);
+
+    var map = L.map('map').setView([lat, lon], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup("{{ weather.city }}")
+        .openPopup();
+
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 300);
+{% endif %}
+
+    // Переключатель часовых зон
+    const toggle = document.getElementById('toggleTimezones');
+    const label = document.getElementById('toggleLabel');
+
+    toggle.addEventListener('change', function () {
+        const showAll = this.checked;
+
+        label.textContent = showAll
+            ? "Показать только местное время"
+            : "Показать все часовые зоны";
+
+        document.querySelectorAll('[data-zone]').forEach(col => {
+            if (col.dataset.zone !== 'local') {
+                col.style.display = showAll ? 'block' : 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+
+
+
+
+

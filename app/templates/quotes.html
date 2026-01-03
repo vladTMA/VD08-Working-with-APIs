@@ -1,0 +1,79 @@
+<!-- quotes.html -->
+{% extends "base.html" %}
+{% block title %}Цитата дня{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4 text-center">Случайная цитата</h2>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('quotes') }}" class="btn btn-primary btn-lg">
+        Показать другую цитату
+    </a>
+</div>
+
+<div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+    <div id="quoteCard" class="card shadow p-4 quote-card mt-4" style="max-width: 700px; width: 100%;">
+
+        <h4 class="mb-3 text-center">Цитата дня</h4>
+
+        <!-- Оригинал -->
+        <blockquote class="blockquote text-center mb-4">
+            <p id="quoteText" class="mb-3">{{ quote }}</p>
+            <footer class="blockquote-footer" id="quoteAuthor">{{ author }}</footer>
+        </blockquote>
+
+        <!-- Перевод -->
+        <blockquote class="blockquote text-center text-muted mb-4">
+            <p id="quoteTextRu" class="mb-3">{{ quote_ru }}</p>
+            <footer class="blockquote-footer">{{ author_ru }}</footer>
+        </blockquote>
+
+        <!-- Кнопки -->
+        <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+            <button id="copyBtn" class="btn btn-outline-primary">Скопировать</button>
+            <button id="speakEnBtn" class="btn btn-outline-secondary">Озвучить EN</button>
+            <button id="speakRuBtn" class="btn btn-outline-secondary">Озвучить RU</button>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const card = document.getElementById("quoteCard");
+    const quote = document.getElementById("quoteText").innerText;
+    const quoteRu = document.getElementById("quoteTextRu").innerText;
+    const author = document.getElementById("quoteAuthor").innerText;
+
+    setTimeout(() => card.classList.add("show"), 50);
+
+    const history = JSON.parse(localStorage.getItem("quoteHistory") || "[]");
+    history.push({ quote, quoteRu, author, date: new Date().toISOString() });
+    localStorage.setItem("quoteHistory", JSON.stringify(history));
+
+    document.getElementById("copyBtn").addEventListener("click", () => {
+        const text = `${quote} — ${author}\n${quoteRu}`;
+        navigator.clipboard.writeText(text);
+    });
+
+    document.getElementById("speakEnBtn").addEventListener("click", () => {
+        const utter = new SpeechSynthesisUtterance(quote + " by " + author);
+        utter.lang = "en-US";
+        speechSynthesis.speak(utter);
+    });
+
+    document.getElementById("speakRuBtn").addEventListener("click", () => {
+        const utter = new SpeechSynthesisUtterance(quoteRu);
+        utter.lang = "ru-RU";
+        speechSynthesis.speak(utter);
+    });
+
+});
+</script>
+{% endblock %}
+
+
